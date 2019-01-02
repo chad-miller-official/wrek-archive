@@ -7,10 +7,12 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "start": "node server.js"
+    "start": "node server.js",
+    "setup-db": "node setup-db.js"
   },
   "dependencies": {
     "express": "^4.16.4",
+    "mongodb": "^3.1.10",
     "vue": "^2.5.21"
   },
   "devDependencies": {
