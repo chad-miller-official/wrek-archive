@@ -1,10 +1,7 @@
 var assert = require('assert');
-var mongodb = require('mongodb');
+var database = require('./database.js');
 
-const mongoClient = new mongodb.MongoClient(
-    process.env.MONGODB_URI,
-    { useNewUrlParser: true }
-);
+mongoClient = database.getClient();
 
 mongoClient.connect(function(err, client) {
     assert.equal(null, err);
@@ -20,8 +17,6 @@ mongoClient.connect(function(err, client) {
                 required: [
                     "file",
                     "dateAdded",
-                    "parts",
-                    "originalFormat",
                     "digitizedFormat"
                 ],
                 properties: {
