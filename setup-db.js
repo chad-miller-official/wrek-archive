@@ -70,9 +70,12 @@ mongoClient.connect(function(err, client) {
                             "CD",
                             "VHS",
                             "Betamax",
-                            "Digital Tape",
+                            "DAT",
                             "Cassette",
-                            "Reel"
+                            "5_Reel",
+                            "7_Reel",
+                            "10_Reel",
+                            "Digital"
                         ],
                         description: "The type of medium the file was originally recorded to"
                     },
