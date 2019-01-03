@@ -70,7 +70,7 @@ mongoClient.connect(function(err, client) {
                             "CD",
                             "VHS",
                             "Betamax",
-                            "Digital Tape",
+                            "DAT",
                             "Cassette",
                             "Reel"
                         ],
