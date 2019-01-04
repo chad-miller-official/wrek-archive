@@ -1,9 +1,9 @@
+require('dotenv').config();
+
 var assert = require('assert');
 var database = require('./database.js');
 
-mongoClient = database.getClient();
-
-mongoClient.connect(function(err, client) {
+database.MONGODB_CLIENT.connect((err, client) => {
     assert.equal(null, err);
     console.log('Successfully connected to MongoDB');
 
@@ -15,14 +15,19 @@ mongoClient.connect(function(err, client) {
             $jsonSchema: {
                 bsonType: "object",
                 required: [
-                    "file",
+                    "fileUrl",
+                    "originalFileName",
                     "dateAdded",
                     "digitizedFormat"
                 ],
                 properties: {
-                    file: {
+                    fileUrl: {
                         bsonType: "string",
-                        description: "URI of the archive file"
+                        description: "URL of the digitized archive file"
+                    },
+                    originalFileName: {
+                        bsonType: "string",
+                        description: "Original name of the digitized archive file"
                     },
                     dateAdded: {
                         bsonType: "date",
@@ -88,7 +93,8 @@ mongoClient.connect(function(err, client) {
     };
 
     db.createCollection("archiveFiles", archiveFilesSchema, function(err) {
+        assert.equal(null, err);
         console.log("Created collection");
-        mongoClient.close();
+        database.MONGODB_CLIENT.close();
     });
 });
