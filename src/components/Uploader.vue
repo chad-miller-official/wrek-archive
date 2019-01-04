@@ -1,6 +1,6 @@
 <template>
   <div id="uploader">
-    <form enctype="multipart/form-data" method="post" action="/upload">
+    <form enctype="multipart/form-data" method="post" action="/files">
       <fieldset>
         <legend>File Upload</legend>
         <input type="file" name="wrekFiles" multiple />

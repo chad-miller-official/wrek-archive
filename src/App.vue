@@ -3,6 +3,9 @@
     <h1>WREK 91.1 Archive</h1>
       <ul>
         <li>
+          <router-link to="/">Home</router-link>
+        </li>
+        <li>
           <router-link to="/uploader">Uploader</router-link>
         </li>
         <li>

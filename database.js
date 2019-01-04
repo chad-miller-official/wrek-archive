@@ -1,22 +1,25 @@
-var assert = require('assert');
-var mongodb = require('mongodb');
+var assert = require('assert')
+var mongodb = require('mongodb')
 
-const MONGODB_CLIENT = new mongodb.MongoClient(
-    process.env.MONGODB_URI,
-    { useNewUrlParser: true }
-);
+function getClient()
+{
+    return new mongodb.MongoClient(
+        process.env.MONGODB_URI,
+        { useNewUrlParser: true }
+    )
+}
 
 function newFileDocument(req, res, next)
 {
-    MONGODB_CLIENT.connect((err, client) => {
-        assert.equal(null, err);
+    getClient().connect((err, client) => {
+        assert.equal(null, err)
 
-        var db = client.db();
-        var newDocuments = [];
+        var db = client.db()
+        var newDocuments = []
 
         req.files.forEach((file) => {
-            var matches = file.key.match(/^(\d+)_(.+)$/);
-            var dateAddedObj = new Date(parseInt(matches[1]));
+            var matches = file.key.match(/^(\d+)_(.+)$/)
+            var dateAddedObj = new Date(parseInt(matches[1]))
 
             var newDocument = {
                 fileUrl: file.location,
@@ -25,19 +28,34 @@ function newFileDocument(req, res, next)
                 digitizedFormat: file.mimetype
             };
 
-            newDocuments.push(newDocument);
-        });
+            newDocuments.push(newDocument)
+        })
 
-        db.collection('archiveFiles').insertMany(newDocuments, (err, res) => {
-            assert.equal(null, err);
-            client.close();
-        });
-    });
+        db.collection('archiveFiles').insertMany(newDocuments, (err, result) => {
+            assert.equal(null, err)
+            client.close()
+            next()
+        })
+    })
+}
 
-    next();
+function listFiles(req, res, next)
+{
+    getClient().connect((err, client) => {
+        assert.equal(null, err)
+        var db = client.db()
+
+        db.collection('archiveFiles').find().sort({ dateAdded: -1 }).toArray((err, result) => {
+            assert.equal(null, err)
+            res.locals.archiveFiles = result;
+            client.close()
+            next()
+        })
+    })
 }
 
 module.exports = {
-    MONGODB_CLIENT: MONGODB_CLIENT,
+    getClient: getClient,
     newFileDocument: newFileDocument,
-};
+    listFiles: listFiles,
+}

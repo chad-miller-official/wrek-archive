@@ -3,20 +3,25 @@ import VueRouter from 'vue-router'
 
 import App from './App.vue'
 
-import Uploader from './components/Uploader.vue'
 import FileList from './components/FileList.vue'
+import Home from './components/Home.vue'
+import Uploader from './components/Uploader.vue'
 
 Vue.use(VueRouter)
 Vue.config.productionTip = false
 
 const routes = [
   {
-    path: '/uploader',
-    component: Uploader
+    path: '/',
+    component: Home
   },
   {
     path: '/files',
     component: FileList
+  },
+  {
+    path: '/uploader',
+    component: Uploader
   }
 ]
 
@@ -27,5 +32,6 @@ const router = new VueRouter({
 
 new Vue({
   router,
+  el: '#app',
   render: h => h(App),
-}).$mount('#app');
+})
