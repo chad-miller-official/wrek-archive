@@ -10,6 +10,7 @@ const ARCHIVE_FILES_SCHEMA = {
       required: [
           "fileUrl",
           "originalFileName",
+          "fileKey",
           "dateAdded",
           "digitizedFormat"
       ],
@@ -21,6 +22,10 @@ const ARCHIVE_FILES_SCHEMA = {
         originalFileName: {
           bsonType: "string",
           description: "Original name of the digitized archive file"
+        },
+        fileKey: {
+          bsonType: "string",
+          description: "The S3 key of the digitized archive file"
         },
         dateAdded: {
           bsonType: "date",

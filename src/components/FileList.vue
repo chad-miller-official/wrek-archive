@@ -8,7 +8,7 @@
         <div v-if="files.length > 0">
           <ul>
             <li v-for="file in files" :key="file._id">
-              {{ file.dateAdded }} - <a :href="file.fileUrl">{{ file.originalFileName }}</a>
+              {{ file.dateAdded }} - <a :href="'/file/content/' + file._id">{{ file.originalFileName }}</a>
             </li>
           </ul>
         </div>
