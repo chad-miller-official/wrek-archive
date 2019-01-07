@@ -20,22 +20,26 @@ const UPLOAD = multer({
   })
 })
 
-function getFile(req, res, next)
+function downloadFile(req, res, next)
 {
   var params = {
     Bucket: process.env.S3_BUCKET_NAME,
     Key: res.locals.fileDocument.fileKey
   }
 
-  S3_CLIENT.getObject(params, (err, data) => {
-    assert.equal(null, err)
-    res.locals.fileData = data
-    next()
+  res.attachment = res.locals.fileDocument.fileName
+  res.writeHead(200, {
+    'Content-Type': res.locals.fileDocument.mimeType,
+    'Content-disposition': 'attachment;filename=' + res.locals.fileDocument.fileName,
+    'Content-Length': res.locals.fileDocument.fileSize
   })
+
+  var readStream = S3_CLIENT.getObject(params).createReadStream()
+  readStream.pipe(res)
 }
 
 module.exports = {
   S3_CLIENT: S3_CLIENT,
   UPLOAD: UPLOAD,
-  getFile: getFile
+  downloadFile: downloadFile
 }

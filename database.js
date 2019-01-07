@@ -19,14 +19,14 @@ function newFileDocument(req, res, next)
 
     req.files.forEach((file) => {
       var matches = file.key.match(/^(\d+)_(.+)$/)
-      var dateAddedObj = new Date(parseInt(matches[1]))
+      var dateUploadedObj = new Date(parseInt(matches[1]))
 
       var newDocument = {
-        fileUrl: file.location,
-        originalFileName: file.originalname,
+        fileName: file.originalname,
         fileKey: file.key,
-        dateAdded: dateAddedObj,
-        digitizedFormat: file.mimetype,
+        fileSize: file.size,
+        dateUploaded: dateUploadedObj,
+        mimeType: file.mimetype,
       };
 
       newDocuments.push(newDocument)
@@ -46,7 +46,7 @@ function listFiles(req, res, next)
     assert.equal(null, err)
     var db = client.db()
 
-    db.collection('archiveFiles').find().sort({ dateAdded: -1 }).toArray((err, result) => {
+    db.collection('archiveFiles').find().sort({ dateUploaded: -1 }).toArray((err, result) => {
       assert.equal(null, err)
       res.locals.archiveFiles = result;
       client.close()

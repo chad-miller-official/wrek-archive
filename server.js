@@ -36,19 +36,7 @@ app.route('/files')
     }
   )
 
-app.get('/file/content/:id',
-  database.getFileById,
-  storage.getFile,
-  (req, res) => {
-    res.writeHead(200, {
-      'Content-Type': res.locals.fileDocument.digitizedFormat,
-      'Content-disposition': 'attachment;filename=' + res.locals.fileDocument.originalFileName,
-      'Content-Length': res.locals.fileData.ContentLength
-    })
-
-    res.end(res.locals.fileData.Body, 'binary')
-  }
-)
+app.get('/file/download/:id', database.getFileById, storage.downloadFile)
 
 var port = process.env.PORT || 5000
 

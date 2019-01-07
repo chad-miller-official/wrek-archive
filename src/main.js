@@ -10,7 +10,7 @@ import Uploader from './components/Uploader.vue'
 Vue.use(VueRouter)
 Vue.config.productionTip = false
 
-const routes = [
+const ROUTES = [
   {
     path: '/',
     component: Home
@@ -25,13 +25,13 @@ const routes = [
   }
 ]
 
-const router = new VueRouter({
+const ROUTER = new VueRouter({
   base: __dirname,
-  routes
+  routes: ROUTES
 })
 
 new Vue({
-  router,
+  router: ROUTER,
   el: '#app',
   render: h => h(App),
 })

@@ -8,18 +8,14 @@ const ARCHIVE_FILES_SCHEMA = {
     $jsonSchema: {
       bsonType: "object",
       required: [
-          "fileUrl",
-          "originalFileName",
+          "fileName",
           "fileKey",
-          "dateAdded",
-          "digitizedFormat"
+          "fileSize",
+          "dateUploaded",
+          "mimeType"
       ],
       properties: {
-        fileUrl: {
-          bsonType: "string",
-          description: "URL of the digitized archive file"
-        },
-        originalFileName: {
+        fileName: {
           bsonType: "string",
           description: "Original name of the digitized archive file"
         },
@@ -27,9 +23,17 @@ const ARCHIVE_FILES_SCHEMA = {
           bsonType: "string",
           description: "The S3 key of the digitized archive file"
         },
-        dateAdded: {
+        fileSize: {
+          bsonType: "int",
+          description: "The size of the digitized archive file in bytes"
+        },
+        dateUploaded: {
           bsonType: "date",
           description: "The date the file was added to the site"
+        },
+        mimeType: {
+          bsonType: "string",
+          description: "The file's type"
         },
         parts: {
           bsonType: "array",
@@ -38,7 +42,7 @@ const ARCHIVE_FILES_SCHEMA = {
             required: [
               "artists",
               "date",
-              "program",
+              "program"
             ],
             properties: {
               artists: {
@@ -57,6 +61,14 @@ const ARCHIVE_FILES_SCHEMA = {
               program: {
                 bsonType: "string",
                 description: "The name of the program this part of the file was originally recorded for"
+              },
+              timeStart: {
+                bsonType: "int",
+                description: "Number of seconds into the media file that this part begins at"
+              },
+              length: {
+                bsonType: "int",
+                description: "Number of seconds long that this part is"
               }
             }
           },
@@ -76,10 +88,6 @@ const ARCHIVE_FILES_SCHEMA = {
             "Digital"
           ],
           description: "The type of medium the file was originally recorded to"
-        },
-        digitizedFormat: {
-          bsonType: "string",
-          description: "The file's type"
         },
         notes: {
           bsonType: "string",
