@@ -6,6 +6,8 @@
           <router-link to="/">Home</router-link>
         </li>
         <li>
+          <router-link to="/login">Login</router-link>
+        <li>
           <router-link to="/uploader">Uploader</router-link>
         </li>
         <li>

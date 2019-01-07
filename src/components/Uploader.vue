@@ -4,7 +4,7 @@
       <fieldset>
         <legend>File Upload</legend>
         <input type="file" name="wrekFiles" multiple />
-        <input type="submit"/>
+        <input type="submit" value="Upload" />
       </fieldset>
     </form>
   </div>

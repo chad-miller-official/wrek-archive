@@ -1,4 +1,5 @@
 var assert = require('assert')
+var bcrypt = require('bcrypt')
 var mongodb = require('mongodb')
 
 function getClient()
@@ -69,9 +70,52 @@ function getFileById(req, res, next)
   })
 }
 
+function getUserForLogin(username, password, done)
+{
+  getClient().connect((err, client) => {
+    assert.equal(null, err)
+    var db = client.db()
+
+    db.collection('users').findOne({ username }, (err, result) => {
+      if(err)
+        return done(err)
+
+      bcrypt.compare(password, result.passwordHash, (err, res) => {
+        if(err)
+          return done(err)
+
+        if(res)
+        {
+          delete result['passwordHash']
+          return done(null, result)
+        }
+
+        return done(null, false);
+      })
+    })
+  })
+}
+
+function getUserById(id, done)
+{
+  getClient().connect((err, client) => {
+    assert.equal(null, err)
+    var db = client.db()
+
+    db.collection('users').findOne({ _id: mongodb.ObjectID(id) }, (err, result) => {
+      if(err)
+        return done(err)
+
+      return done(null, result)
+    })
+  })
+}
+
 module.exports = {
-  getClient: getClient,
-  newFileDocument: newFileDocument,
-  listFiles: listFiles,
-  getFileById: getFileById,
+  getClient,
+  getFileById,
+  getUserById,
+  getUserForLogin,
+  listFiles,
+  newFileDocument
 }

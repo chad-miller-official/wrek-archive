@@ -5,6 +5,7 @@ import App from './App.vue'
 
 import FileList from './components/FileList.vue'
 import Home from './components/Home.vue'
+import Login from './components/Login.vue'
 import Uploader from './components/Uploader.vue'
 
 Vue.use(VueRouter)
@@ -18,6 +19,10 @@ const ROUTES = [
   {
     path: '/files',
     component: FileList
+  },
+  {
+    path: '/login',
+    component: Login
   },
   {
     path: '/uploader',

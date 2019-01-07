@@ -1,6 +1,7 @@
 require('dotenv').config()
 
 var assert = require('assert')
+
 var database = require('./database.js')
 
 const ARCHIVE_FILES_SCHEMA = {
@@ -98,6 +99,28 @@ const ARCHIVE_FILES_SCHEMA = {
   }
 }
 
+const USERS_SCHEMA = {
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: [
+        "username",
+        "passwordHash"
+      ],
+      properties: {
+        username: {
+          bsonType: "string",
+          description: "The username that the user uses to log in with"
+        },
+        passwordHash: {
+          bsonType: "string",
+          description: "The bcrypt-ed hash of the user's password"
+        }
+      }
+    }
+  }
+}
+
 database.getClient().connect((err, client) => {
   assert.equal(null, err)
   console.log('Successfully connected to MongoDB')
@@ -107,7 +130,12 @@ database.getClient().connect((err, client) => {
 
   db.createCollection('archiveFiles', ARCHIVE_FILES_SCHEMA, (err) => {
     assert.equal(null, err)
-    console.log('Created collection')
+    console.log('Created archiveFiles collection')
+  })
+
+  db.createCollection('users', USERS_SCHEMA, (err) => {
+    assert.equal(null, err)
+    console.log('Created users collection')
     client.close()
-   })
+  })
 })

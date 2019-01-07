@@ -1,4 +1,3 @@
-var assert = require('assert')
 var awsSdk = require('aws-sdk')
 var multer = require('multer')
 var multerS3 = require('multer-s3')
@@ -10,7 +9,7 @@ awsSdk.config.update({
 })
 
 const S3_CLIENT = new awsSdk.S3({ apiVersion: '2006-03-01' })
-const UPLOAD = multer({
+const UPLOADER = multer({
   storage: multerS3({
     s3: S3_CLIENT,
     bucket: process.env.S3_BUCKET_NAME,
@@ -39,7 +38,7 @@ function downloadFile(req, res, next)
 }
 
 module.exports = {
-  S3_CLIENT: S3_CLIENT,
-  UPLOAD: UPLOAD,
-  downloadFile: downloadFile
+  S3_CLIENT,
+  UPLOADER,
+  downloadFile
 }

@@ -1,42 +1,39 @@
 require('dotenv').config()
 
-var assert = require('assert')
+var bodyParser = require('body-parser')
 var express = require('express')
+var expressSession = require('express-session')
 var serveStatic = require('serve-static')
+var passport = require('passport')
+var passportLocal = require('passport-local')
 
 var database = require('./database.js')
-var storage = require('./storage.js')
+var routesFiles = require('./routes/files.js')
+var routesUsers = require('./routes/users.js')
 
-database.getClient().connect((err, client) => {
-  assert.equal(null, err)
-  console.log('Successfully connected to MongoDB')
-  client.close()
+passport.use(new passportLocal.Strategy(database.getUserForLogin))
+
+passport.serializeUser((user, done) => {
+  done(null, user._id)
 })
 
-storage.S3_CLIENT.headBucket({ Bucket: process.env.S3_BUCKET_NAME }, (err, data) => {
-  assert.equal(null, err)
-  console.log('Successfully connected to S3')
-})
+passport.deserializeUser(database.getUserById)
 
 app = express()
 
-app.use('/', serveStatic(__dirname + '/dist'))
-app.route('/files')
-  .get(
-    database.listFiles,
-    (req, res) => {
-      res.json(res.locals.archiveFiles)
-    }
-  )
-  .post(
-    storage.UPLOAD.array('wrekFiles'),
-    database.newFileDocument,
-    (req, res) => {
-      res.redirect('/#/files')
-    }
-  )
+app.use(expressSession({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false
+}));
 
-app.get('/file/download/:id', database.getFileById, storage.downloadFile)
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use('/', serveStatic(__dirname + '/dist'))
+app.use('/files', routesFiles)
+app.use('/users', routesUsers)
 
 var port = process.env.PORT || 5000
 

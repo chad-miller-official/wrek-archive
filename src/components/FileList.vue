@@ -18,7 +18,7 @@
               <tr v-for="file in files" :key="file._id">
                 <td>{{ new Date(file.dateUploaded).toLocaleString('en-US', { timeZone: 'America/New_York' }) }}</td>
                 <td>{{ file.readableSize }}</td>
-                <td><a :href="'/file/download/' + file._id">{{ file.fileName }}</a></td>
+                <td><a :href="'/files/' + file._id + '/download'">{{ file.fileName }}</a></td>
               </tr>
             </tbody>
           </table>
