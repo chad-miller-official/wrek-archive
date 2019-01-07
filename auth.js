@@ -3,7 +3,7 @@ function checkLoggedIn(req, res, next)
   if(req.user)
     next()
   else
-    res.redirect(401, '/#/login')
+    res.status(401).send({ error: 'You are not authorized to upload files.' })
 }
 
 module.exports = {
